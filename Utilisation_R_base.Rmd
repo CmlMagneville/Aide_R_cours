@@ -37,7 +37,7 @@ Deux façons de faire, à vous de choisir celle que vous préférez :
 Vous pouvez utiliser la commande `setwd()` : **set** pour **définir** et **wd** pour **working directory**, répertoire de travail en anglais. 
 
 ```{r}
-setwd("C:/Users/gael-/Dropbox/PhD/Enseignements/HLBE405")
+setwd("C:/Users/camil/Camille/1_These/5_Monitorat/R_Github_repo/Aide_R_cours")
 ```
 
 2. Façon clique bouton 
@@ -240,5 +240,9 @@ Voilà, vous êtes arrivés à l'étape finale des graphiques!
 <br>
 
 ![Alt Text](https://media.giphy.com/media/xT77XWum9yH7zNkFW0/giphy.gif)
+
+<br>
+
 Encore une fois, il est possible de faire des figures via `ggplot2`. Vous trouverez votre bonheur ici ==> <https://www.r-graph-gallery.com/index.html>
+
 
