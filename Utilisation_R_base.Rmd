@@ -21,7 +21,7 @@ Vous devez d'abord télécharger :
 
 # 1. Ouverture de votre fichier Excel
 
-### 1.1 - Enregistrement le fichier de données au format .csv 
+### 1.1 - Enregistrement du fichier de données au format .csv 
   
 Pour ouvrir votre fichier de données sur RStudio, il faut l'enregistrer dans un format **.csv**. 
 
@@ -118,10 +118,16 @@ La fonction `plot()` vous permet de construire un nuage de point en utilisant de
 `plot(x = variable_à_mettre_en_abscisse, y = variable_à_mettre_en_ordonnées)` .
 <br>
 
-De plus, vous pouvez utiliser de multiples arguments afin de changer les couleurs, les formes (etc.) utilisées dans le graphique. Par exemple, l'argument `cex`permet de spécifier la taille des symboles utilisés, les arguments `xlim` et `ylim` permettent de fixer les limites des axes x et y, les arguments `xlab`et `ylab` permettent de fixer le nom des axes x et y, l'argument `col` permet de fixer la couleur des points (voici une liste des possibles couleurs dans R: <http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf>), l'argument `main` permet de donner un titre au graphique et l'argument `pch{ permet de choisir la forme des points (cercles, carrés, losanges...)
+De plus, vous pouvez utiliser de multiples arguments afin de changer les couleurs, les formes (etc.) utilisées dans le graphique. Par exemple : 
+
+* l'argument `cex` permet de spécifier la taille des symboles utilisés.
+* les arguments `xlim` et `ylim` permettent de fixer les limites des axes x et y.
+* les arguments `xlab` et `ylab` permettent de fixer le nom des axes x et y.
+* l'argument `col` permet de fixer la couleur des points (voici une liste des possibles couleurs dans R: <http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf>). 
+* l'argument `pch` permet de choisir la forme des points (cercles, carrés, losanges...).
 <br>
 
-Avec les données de l'exemple, nous pouvons représenter le nuage de points de la consommation par unité de masse en fonction de la masse de nourriture avant l'expérience avant même si ce n'est pas très intéressant (mais pour vous montrer sur un exemple concret comme ça se code):
+Avec les données de l'exemple, nous pouvons représenter le nuage de points de la consommation par unité de masse en fonction de la masse de nourriture avant l'expérience avant même si ce n'est pas très intéressant (mais pour vous montrer sur un exemple concret comment ça se code):
 
 ```{r}
 plot(x = data$poids_sec_av, y = data$poids_sec_ap,
@@ -171,14 +177,16 @@ Une fois les proriétés du modèle vérifiées, on peut afficher la droite de r
 <br>
 
 ```{r}
-# 3/ On peut ensuite refaire le graphique précédent en ajoutant la droite de régression grace à la fonction abline():
+# 3/ On peut ensuite refaire le graphique précédent en ajoutant la droite de régression 
+# grace à la fonction abline():
 plot(x = data$poids_sec_av, y = data$poids_sec_ap,
      xlim = c(0, 8), ylim = c(0, 8), 
      pch = 18, 
      cex = 1, 
      col = "aquamarine3",
-     xlab = "Masse nourriture avant", ylab = "Masse nourriture après",
-     main = "Masse de nourriture après l'expérience \n en fonction de la masse de nourriture avant")
+     xlab = "Masse nourriture avant (g)", 
+     ylab = "Masse nourriture après (g)",
+     main = "NE PAS METTRE DE TITRE ! \n Le titre va en-dessous de la figure dans votre rapport")
 abline(model, col = "red")
 ```
 <br>
@@ -200,8 +208,11 @@ cor(data$poids_sec_av, data$poids_sec_ap, method = c("pearson"))
 Pour produire un histogramme, on utilise la fonction `hist()`. Les arguments pour le titre, la couleur et le nom des axes sont les mêmes que ceux vus dans la partie **3.1**. Vous pouvez choisir de représenter la fréquence d'une variable unique comme suit pour la variable de la masse sèche avant l'expérience:
 <br>
 ```{r}
-hist(data$poids_sec_av, col = "aquamarine3", main = "Fréquences des masses sèches avant", 
-     xlab = "masses sèches (en g)", ylab = "Fréquence")
+hist(data$poids_sec_av, 
+     col = "aquamarine3", 
+     main = "TOUJOURS PAS DE TITRE ICI", 
+     xlab = "masses sèches (en g)", 
+     ylab = "Fréquence")
 ```
 <br>
 
@@ -217,9 +228,11 @@ Les arguments pour le titre, la couleur et le nom des axes sont les mêmes que c
 <br>
 
 ```{r}
-boxplot(data$conso_masse ~ data$espece, col = "aquamarine3", 
-        main = "Consommation en fonction des espèces", xlab = "espèces", 
-        ylab = "Consommation par unité de masse")
+boxplot(data$conso_masse ~ data$espece, 
+        col = "aquamarine3", 
+        main = "TOUJOURS PAS !!!", 
+        xlab = "espèces", 
+        ylab = "Consommation par unité de masse (g/individus)")
 ```
 <br>
 
@@ -227,5 +240,5 @@ Voilà, vous êtes arrivés à l'étape finale des graphiques!
 <br>
 
 ![Alt Text](https://media.giphy.com/media/xT77XWum9yH7zNkFW0/giphy.gif)
-
+Encore une fois, il est possible de faire des figures via `ggplot2`. Vous trouverez votre bonheur ici ==> <https://www.r-graph-gallery.com/index.html>
 
