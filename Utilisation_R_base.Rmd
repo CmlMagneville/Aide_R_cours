@@ -2,7 +2,9 @@
 title: "Parce que c'est votre projet, utilisez RStudio !"
 author: "Camille Magneville & Gaël Mariani"
 date: "`r Sys.Date()`"
-output: html_document
+output: 
+  html_document:
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +37,7 @@ Deux façons de faire, à vous de choisir celle que vous préférez :
 Vous pouvez utiliser la commande `setwd()` : **set** pour **définir** et **wd** pour **working directory**, répertoire de travail en anglais. 
 
 ```{r}
-setwd("C:/Users/camil/Camille/1_These/5_Monitorat/2A/Eco_fonctio_L2")
+setwd("C:/Users/camil/Camille/1_These/5_Monitorat/R_Github_repo/Aide_R_cours")
 ```
 
 2. Façon clique bouton 
@@ -186,7 +188,7 @@ abline(model, col = "red")
 Pour calculer le coefficient de correlation entre deux variables, il faut utiliser la fonction `cor()` suivant la syntaxe suivante:<br>
  `cor(variable_1 , variable_2, method = c("pearson"))`. Ici on utilise un coefficient de pearson car les deux variables à étudier sont continues.<br>
 
-⚠️ **Correlation n'est pas causalité! **
+💡 **Correlation n'est pas causalité! **
 
 ```{r}
 cor(data$poids_sec_av, data$poids_sec_ap, method = c("pearson"))
@@ -198,7 +200,8 @@ cor(data$poids_sec_av, data$poids_sec_ap, method = c("pearson"))
 Pour produire un histogramme, on utilise la fonction `hist()`. Les arguments pour le titre, la couleur et le nom des axes sont les mêmes que ceux vus dans la partie **3.1**. Vous pouvez choisir de représenter la fréquence d'une variable unique comme suit pour la variable de la masse sèche avant l'expérience:
 <br>
 ```{r}
-hist(data$poids_sec_av, col = "aquamarine3", main = "Fréquences des masses sèches avant", xlab = "masses sèches (en g)", ylab = "Fréquence")
+hist(data$poids_sec_av, col = "aquamarine3", main = "Fréquences des masses sèches avant", 
+     xlab = "masses sèches (en g)", ylab = "Fréquence")
 ```
 <br>
 
@@ -214,7 +217,9 @@ Les arguments pour le titre, la couleur et le nom des axes sont les mêmes que c
 <br>
 
 ```{r}
-boxplot(data$conso_masse ~ data$espece, col = "aquamarine3", main = "Consommation en fonction des espèces", xlab = "espèces", ylab = "Concommation par unité de masse")
+boxplot(data$conso_masse ~ data$espece, col = "aquamarine3", 
+        main = "Consommation en fonction des espèces", xlab = "espèces", 
+        ylab = "Consommation par unité de masse")
 ```
 <br>
 
