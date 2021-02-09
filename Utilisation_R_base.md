@@ -215,7 +215,7 @@ plot(x = data$poids_sec_av, y = data$poids_sec_ap,
      cex = 1, 
      col = "aquamarine3",
      xlab = "Masse nourriture avant", ylab = "Masse nourriture après",
-     main = "Masse de nourriture après en fonction de la masse de nourriture avant")
+     main = "Masse de nourriture après en fonction \n de la masse de nourriture avant l'expérience")
 ```
 
 ![](Utilisation_R_base_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
@@ -278,7 +278,7 @@ plot(x = data$poids_sec_av, y = data$poids_sec_ap,
      cex = 1, 
      col = "aquamarine3",
      xlab = "Masse nourriture avant", ylab = "Masse nourriture après",
-     main = "Masse de nourriture après en fonction de la masse de nourriture avant")
+     main = "Masse de nourriture après l'expérience \n en fonction de la masse de nourriture avant")
 abline(model, col = "red")
 ```
 
