@@ -349,7 +349,7 @@ Ici nous allons **représenter les moyennes des consommations par unité de mass
 Dans un **premier temps**, il faut **calculer les moyennes de consommation pour chaque espèce** et les ajouter au tableau de données.
 <br />
 
-💡 Pour calculer la consommation moyenne par espèces, il faut aller **extraire dans le tableau les données propres à chaque espèces séparément**.
+💡 Pour calculer la consommation moyenne par espèces, il faut aller **extraire dans le tableau les, données propres à chaque espèces séparément**.
 Par exemple, pour l'espèce a, on demande à l'ordinateur d'aller dans le tableau `data` et d'extraire dans la colonne `data$conso_masse`, les valeurs pour lesquelles (d'où le `which`) l'espèce est l'espèce a.
 En langage R, ça donne : 
 <br />
@@ -422,7 +422,18 @@ Pour produire un barplot avec les barres d'erreur associées, il est beaucoup pl
 
 <br />
 
-La première chose à faire est de **calculer l'intervalle de confiance de chaque moyenne de consommation**. C'est cet intervalle qui sera représenté dans les **barres d'erreur**. Le calcul de l'intervalle de confiance passe par le calcul de différentes valeurs: la moyenne (déjà réalisé plus haut), l'écart-type et l'erreur type. dans le code suivant, on récipère les lignes correspondant aux espèces voulues comme réalisé en 3.4.1:
+La première chose à faire est de **calculer l'intervalle de confiance de chaque moyenne de consommation**. C'est cet intervalle qui sera représenté dans les **barres d'erreur**. Le calcul de l'intervalle de confiance passe par le calcul de différentes valeurs: la moyenne (déjà réalisé plus haut), l'écart-type et l'erreur type. dans  L'intervalle de confiance est égal à : 
+
+$$ IC = [\bar{x} - t_α * {\frac{s}{\sqrt{n}}} ; \bar{x} + t_α * {\frac{s}{\sqrt{n}}} ] $$
+Ici : 
+
+- $\bar{x}$ correspond à la moyenne. 
+- $t_α$ la valeur du coefficient de Student pour l'intervalle de confiance à 95%, soit $t_{95}$. Se calcule avec la fonction `qt()`.
+- $s$ l'écart-type. 
+- $n$ le nombre d'échantillons. 
+- $\frac{s}{\sqrt{n}}$ est appelée l'erreur type.
+
+On va procéder étape par étape pour obtenir ces différentes valeurs. De code suivant, on récipèreules lignes correspondant aux espèces voulues comme réalisé en **3.4.1**:
 <br />
 
 
@@ -435,7 +446,7 @@ sd_a <- sd(data$conso_masse[which(data$espece == "a")])
 # Calcul de l'erreur type des consommations pour l'espèce a:
 se_a <- sd_a/sqrt(nrow(data[which(data$espece == "a"), ]))
 
-# Calcul de l'intervalle de confiance pour l'espèce a:
+# C # le sqrt permet de prendre la racine carréealcul de l'intervalle de confiance pour l'espèce a:
 ic_a <- se_a * qt(0.975, nrow(data[which(data$espece == "b"), ]) - 1)
 
 ## On réalise la même chose pour les deux espèces restantes:
@@ -468,29 +479,36 @@ Au sein des fonctions `geom_bar` et `geom_errorbar` (ainsi que toutes les foncti
 
 
 ```r
-# On appelle l'outil ggplot2 (à installer avant si besoin: install.packages("ggplo2"))
+# On appelle l'outil ggplot2 (à installer avant si besoin: install.packages("ggplot2"))
 library(ggplot2)
 
 ## On trace le graphique:
 ggplot(data_mean) +
   geom_bar(aes(x = data_mean$espece, y = data_mean$mean), stat = "identity", 
-           fill = "aquamarine3") +
-  geom_errorbar(aes(x = data_mean$espece, ymin = data_mean$mean - data_mean$ic, ymax = data_mean$mean +     data_mean$ic), width = 0.2, colour = "orange",  size = 1) +
+          fill = "aquamarine3") +
+  geom_errorbar(aes(x = data_mean$espece, 
+                    ymin = data_mean$mean - data_mean$ic, 
+                    ymax = data_mean$mean + data_mean$ic), 
+                width = 0.2, colour = "orange",  size = 1) +
   labs(x = "Espèces", y = "Moyenne des consommations")
 ```
 
 ![](Utilisation_R_base_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+ +
+  theme_bw()<br />
+
+💡 Remarque 1: aes(x  =mapping =  ..., y = ...) permet d'indiquer les données de chaque couche à mettre en abscisse et ordonnées
+<br /.
+
+💡 Remarque 2: pour t : pour tracer les barres d'erreur correspondant à l'intervalle de confiance on ajoute (pour la barre haute) et retire (pour la barre basse) à la moyenne l'étendue de l'intervalle de confiance, cf arguments ymin (barre basse) et ymax (barre haute).
 <br />
 
-💡 Remarque 1: aes(x = ..., y = ...) permet d'indiquer les données de chaque couche à mettre en abscisse et ordonnées
+💡 Remarque 3 : le paramètre "fill" de la fonction geom_bar permet de définir la couleur remplissant les barplots, les paramètres "colour", "width" et "size" de la fonction geom_errorbar permettent de définir la couleur, l'épaisseur et la taille des barres d'erreurs.
 <br />
 
-💡 Remarque 2: pour tracer les barres d'erreur correspondant à l'intervalle de confiance on ajoute (pour la barre haute) ou retire (pour la barre basse) à la moyenne l'étendue de l'intervalle de confiance. cf arguments ymin (barre basse) et ymax (barre haute)
-<br />
+💡 Remarque 4 : `theme_bw()` permet d'encardrer le plot et de mettre le font de couleur blanche. 
 
-💡 Remarque 3: le paramètre "fill" de la fonction geom_bar permet de définir la couleur remplissant les barplots, les paramètres "colour", "width" et "size" de la fonction geom_errorbar permettent de définir la couleur, l'épaisseur et la taille des barres d'erreurs
 <br />
-
 
 
 ### 3.5 - Produire des boîtes à moustaches
