@@ -294,7 +294,6 @@ barplot(height = data_mean$mean, names = data_mean$espece, col = "aquamarine3")
 #### 3.4.2 Produire un barplot avec les barres d'erreur associées
 <br />
 
-
 Pour produire un barplot avec les barres d'erreur associées, il est beaucoup plus facile de fonctionner avec l'outil `ggplot2` qu'avec `R base`. Ici nous allons donc vous montrer comment coder ça en utilisant `ggplot2`. Nous allons de nouveau représenter les moyennes des consommations par unité de masse en fonction des espèces.
 
 <br />
