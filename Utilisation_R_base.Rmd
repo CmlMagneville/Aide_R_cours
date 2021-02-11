@@ -109,7 +109,7 @@ head(data)
 # 3. Production des figures
 
 Pour illustrer vos résultats, il existe de multiples types de graphiques!
-Sur ce site (<https://www.r-graph-gallery.com/index.html>) vous trouverez de nombreuses idées et la façon de les coder. Pour chaque type de graphique, il y a deux façons de les coder: soit en utilisant un outil particulier qui s'appelle **ggplot2** soit en codant en **base R** comme on fait depuis le début du tutoriel. Dans un premier temps nous vous recommendons de suivre la version de code **base R** lorsque les deux sont proposées 💡
+Sur ce site (<https://www.r-graph-gallery.com/index.html>) vous trouverez de nombreuses idées et la façon de les coder. Pour chaque type de graphique, il y a deux façons de les coder: soit en utilisant un outil particulier qui s'appelle `ggplot2` soit en codant en `base R` comme on fait depuis le début du tutoriel. Dans un premier temps nous vous recommendons de suivre la version de code `base R` lorsque les deux sont proposées 💡
 <br>
 
 ### 3.1 Produire un nuage de points 
@@ -126,6 +126,7 @@ De plus, vous pouvez utiliser de multiples arguments afin de changer les couleur
 * l'argument `col` permet de fixer la couleur des points (voici une liste des possibles couleurs dans R: <http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf>). 
 * l'argument `pch` permet de choisir la forme des points (cercles, carrés, losanges...).
 <br>
+* l'argument `main` permet d'ajouterun titre en haut du graphique. Cependant les titres devant être en dessous des graphiques, n'utilisez pas cet argument dans vos code.
 
 Avec les données de l'exemple, nous pouvons représenter le nuage de points de la consommation par unité de masse en fonction de la masse de nourriture avant l'expérience avant même si ce n'est pas très intéressant (mais pour vous montrer sur un exemple concret comment ça se code):
 
@@ -136,7 +137,7 @@ plot(x = data$poids_sec_av, y = data$poids_sec_ap,
      cex = 1, 
      col = "aquamarine3",
      xlab = "Masse nourriture avant", ylab = "Masse nourriture après",
-     main = "Masse de nourriture après en fonction \n de la masse de nourriture avant l'expérience")
+     main = "NE PAS METTRE DE TITRE ! \n Le titre va en-dessous de la figure dans votre rapport")
 
 ```
 <br>
@@ -201,31 +202,183 @@ Pour calculer le coefficient de correlation entre deux variables, il faut utilis
 ```{r}
 cor(data$poids_sec_av, data$poids_sec_ap, method = c("pearson"))
 ```
-<br>
+<br />
 
-### 3.2 - Produire un histogramme
+
+### 3.3 - Produire un histogramme 
+<br />
+
 
 Pour produire un histogramme, on utilise la fonction `hist()`. Les arguments pour le titre, la couleur et le nom des axes sont les mêmes que ceux vus dans la partie **3.1**. Vous pouvez choisir de représenter la fréquence d'une variable unique comme suit pour la variable de la masse sèche avant l'expérience:
-<br>
+<br />
+
 ```{r}
 hist(data$poids_sec_av, 
      col = "aquamarine3", 
      main = "TOUJOURS PAS DE TITRE ICI", 
      xlab = "masses sèches (en g)", 
-     ylab = "Fréquence")
+     ylab = "Effectif")
+```
+<br />
+
+
+### 3.4 Produire un barplot et les barres d'erreur associées
+<br />
+
+
+#### 3.4.1 Produire un barplot
+<br />
+
+
+Pour produire un barplot on utilise la fonction `barplot()` suivant la syntaxe suivante:
+<br>
+`barplot(height = nom_variable_à_mettre_en_y, names = nom_variable_à_mettre_en_x)`
+<br />
+
+Ici nous allons **représenter les moyennes des consommations par unité de masse en fonction des espèces**.
+Dans un **premier temps**, il faut **calculer les moyennes de consommation pour chaque espèce** et les ajouter au tableau de données.
+<br />
+
+💡 Pour calculer la consommation moyenne par espèces, il faut aller **extraire dans le tableau les données propres à chaque espèces séparément**.
+Par exemple, pour l'espèce a, on demande à l'ordinateur d'aller dans le tableau `data` et d'extraire dans la colonne `data$conso_masse`, les valeurs pour lesquelles (d'où le `which`) l'espèce est l'espèce a.
+En langage R, ça donne : 
+<br />
+
+```{r}
+data$conso_masse[which(data$espece == "a")]
+```
+<br />
+
+Pour prendre la moyenne de ces valeurs, on utilise la fonction `mean()` (moyenne en anglais) comme suit : 
+<br />
+
+```{r}
+mean_esp_a <- mean(data$conso_masse[which(data$espece == "a")])
+```
+<br />
+
+On fait la même chose pour les espèces restantes :
+<br />
+
+```{r}
+# Calcul des moyennes de consommation pour chaque espèce:
+mean_esp_b <- mean(data$conso_masse[which(data$espece == "b")])
+mean_esp_c <- mean(data$conso_masse[which(data$espece == "c")])
+```
+<br />
+
+Ensuite, nous **créons un nouveau tableau de données** pour qu'il contienne les moyennes de consommation pour chaque espèce:
+```{r}
+data_mean <- data.frame(espece = c("a", "b", "c"), mean = c(mean_esp_a, mean_esp_b, mean_esp_c))
 ```
 <br>
 
+Enfin, pour chaque ligne (correspondant à une espèce) du nouveau tableau, on **ajoute les valeurs** des moyennes associées:
+💡 On utilise la fonction `round` pour arrondir les décimales des moyennes à la 3ème décimale ici:
+<br />
 
-### 3.3 - Produire des boîtes à moustaches
+```{r}
+data_mean[1, "mean"] <- round(mean_esp_a, 3)
+data_mean[2, "mean"] <- round(mean_esp_b, 3)
+data_mean[3, "mean"] <- round(mean_esp_c, 3)
+```
+<br>
 
+On peut alors mettre en place le **barplot des moyennes de consommation en fonction des espèces**:
+```{r}
+barplot(height = data_mean$mean, names = data_mean$espece, col = "aquamarine3")
+```
+
+<br />
+
+
+#### 3.4.2 Produire un barplot avec les barres d'erreur associées
+<br />
+
+
+Pour produire un barplot avec les barres d'erreur associées, il est beaucoup plus facile de fonctionner avec l'outil `ggplot2` qu'avec `R base`. Ici nous allons donc vous montrer comment coder ça en utilisant `ggplot2`. Nous allons de nouveau représenter les moyennes des consommations par unité de masse en fonction des espèces.
+
+<br />
+
+La première chose à faire est de **calculer l'intervalle de confiance de chaque moyenne de consommation**. C'est cet intervalle qui sera représenté dans les **barres d'erreur**. Le calcul de l'intervalle de confiance passe par le calcul de différentes valeurs: la moyenne (déjà réalisé plus haut), l'écart-type et l'erreur type. dans le code suivant, on récipère les lignes correspondant aux espèces voulues comme réalisé en 3.4.1:
+<br />
+
+```{r}
+## Exemple détaille pour l'espèce a: 
+
+# Calcul de l'écart type des consommation pour l'espèce a:
+sd_a <- sd(data$conso_masse[which(data$espece == "a")])
+
+# Calcul de l'erreur type des consommations pour l'espèce a:
+se_a <- sd_a/nrow(data[which(data$espece == "a"), ])
+
+# Calcul de l'intervalle de confiance pour l'espèce a:
+ic_a <- se_a * qt(0.975, nrow(data[which(data$espece == "b"), ]) - 1)
+
+## On réalise la même chose pour les deux espèces restantes:
+sd_b <- sd(data$conso_masse[which(data$espece == "b")])
+se_b <- sd_b/nrow(data[which(data$espece == "b"), ])
+ic_b <- se_b * qt(0.975, nrow(data[which(data$espece == "b"), ]) - 1)
+
+sd_c <- sd(data$conso_masse[which(data$espece == "c")])
+se_c <- sd_c/nrow(data[which(data$espece == "c"), ])
+ic_c <- se_c * qt(0.975, nrow(data[which(data$espece == "c"), ]) - 1)
+
+```
+<br />
+
+On peut ensuite **ajouter ces données au nouveau tableau** créé plus haut: 
+<br />
+
+```{r}
+data_mean$ic <- c(ic_a, ic_b, ic_c)
+```
+<br />
+
+
+Et enfin **représenter le barplot avec les barres d'erreur**!
+<br />
+
+💡Pour comprendre le fonctionnement de l'outil `ggplot`, il faut s'imaginer qu'il fonctionne en ajoutant couches du graphique sur couches du graphique. Par exemple, dans notre cas, nous allons d'abord lui spécifier avec quelles données nous travaillons en utilisant la fonction `ggplot`, puis nous lui spécifions que nous voulons réaliser un barplot en utilisant la fonction `geom_bar` et enfin nous lui spécifions que nous voulons ajouter des barres d'erreurs en utilisant la fonction `geom_errorbar`. Nous pouvons aussi changer le nom des axes en utilisant la fonction `labs`.
+Au sein des fonctions `geom_bar` et `geom_errorbar` (ainsi que toutes les fonctions qui permettent d'ajouter des "couches graphiques"), il faut indiquer quelles données vont être utilisées en abscisse et en ordonnées pour tracer les couches  et d'autres paramètres notamment pour les options de couleurs:
+<br />
+
+```{r, warning = FALSE}
+# On appelle l'outil ggplot2 (à installer avant si besoin: install.packages("ggplo2"))
+library(ggplot2)
+
+## On trace le graphique:
+ggplot(data_mean) +
+  geom_bar(aes(x = data_mean$espece, y = data_mean$mean), stat = "identity", 
+           fill = "aquamarine3") +
+  geom_errorbar(aes(x = data_mean$espece, ymin = data_mean$mean - data_mean$ic, ymax = data_mean$mean +     data_mean$ic), width = 0.2, colour = "orange",  size = 1) +
+  labs(x = "Espèces", y = "Moyenne des consommations")
+
+```
+<br />
+
+💡 Remarque 1: aes(x = ..., y = ...) permet d'indiquer les données de chaque couche à mettre en abscisse et ordonnées
+<br />
+
+💡 Remarque 2: pour tracer les barres d'erreur correspondant à l'intervalle de confiance on ajoute (pour la barre haute) ou retire (pour la barre basse) à la moyenne l'étendue de l'intervalle de confiance. cf arguments ymin (barre basse) et ymax (barre haute)
+<br />
+
+💡 Remarque 3: le paramètre "fill" de la fonction geom_bar permet de définir la couleur remplissant les barplots, les paramètres "colour", "width" et "size" de la fonction geom_errorbar permettent de définir la couleur, l'épaisseur et la taille des barres d'erreurs
+<br />
+
+
+
+### 3.5 - Produire des boîtes à moustaches
+
+
+<br />
 Pour créér une boite à moustache, on utilise la fonction `boxplot()` comme suit:
 <br>
 `boxplot(variable_à_mettre_en_y ~ variable_à_mettre_en_x)`
 <br>
 
 Les arguments pour le titre, la couleur et le nom des axes sont les mêmes que ceux vus dans la partie **3.1**. Si on cherche à représenter la consommation par unité de masse en fonction de l'espèce, on code donc ainsi:
-<br>
+<br />
 
 ```{r}
 boxplot(data$conso_masse ~ data$espece, 
@@ -234,10 +387,10 @@ boxplot(data$conso_masse ~ data$espece,
         xlab = "espèces", 
         ylab = "Consommation par unité de masse (g/individus)")
 ```
-<br>
+<br />
 
 Voilà, vous êtes arrivés à l'étape finale des graphiques! 
-<br>
+<br />
 
 ![Alt Text](https://media.giphy.com/media/xT77XWum9yH7zNkFW0/giphy.gif)
 
