@@ -308,18 +308,18 @@ La première chose à faire est de **calculer l'intervalle de confiance de chaqu
 sd_a <- sd(data$conso_masse[which(data$espece == "a")])
 
 # Calcul de l'erreur type des consommations pour l'espèce a:
-se_a <- sd_a/nrow(data[which(data$espece == "a"), ])
+se_a <- sd_a/sqrt(nrow(data[which(data$espece == "a"), ]))
 
 # Calcul de l'intervalle de confiance pour l'espèce a:
 ic_a <- se_a * qt(0.975, nrow(data[which(data$espece == "b"), ]) - 1)
 
 ## On réalise la même chose pour les deux espèces restantes:
 sd_b <- sd(data$conso_masse[which(data$espece == "b")])
-se_b <- sd_b/nrow(data[which(data$espece == "b"), ])
+se_b <- sd_b/sqrt(nrow(data[which(data$espece == "b"), ]))
 ic_b <- se_b * qt(0.975, nrow(data[which(data$espece == "b"), ]) - 1)
 
 sd_c <- sd(data$conso_masse[which(data$espece == "c")])
-se_c <- sd_c/nrow(data[which(data$espece == "c"), ])
+se_c <- sd_c/sqrt(nrow(data[which(data$espece == "c"), ]))
 ic_c <- se_c * qt(0.975, nrow(data[which(data$espece == "c"), ]) - 1)
 
 ```
